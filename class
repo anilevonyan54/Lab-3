@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class CoderDecoder {
+public:
+    CoderDecoder(int s) : shift(s) {}
+
+    string encode(const string& input) {
+        return shiftString(input, shift);
+    }
+
+    string decode(const string& input) {
+        return shiftString(input, -shift);
+    }
+
+private:
+    int shift;
+
+    string shiftString(const string& input, int shift) {
+        string result = input;
+        for (int i = 0; i < result.length(); i++) {
+            char letter = result[i];
+            letter = char(letter + shift);
+
+            if (letter > 'z') {
+                letter = char(letter - 26);
+            } else if (letter < 'a') {
+                letter = char(letter + 26);
+            }
+
+            result[i] = letter;
+        }
+        return result;
+    }
+};
+
+int main() {
+    string text;
+    int shift;
+
+    cout << "Enter text to encode: ";
+    getline(cin, text);
+
+    transform(text.begin(), text.end(), text.begin(), ::tolower);
+
+    cout << "Enter shift value: ";
+    cin >> shift;
+
+    CoderDecoder coder(shift);
+
+    string encoded = coder.encode(text);
+    cout << "Encoded text: " << encoded << endl;
+
+    string decoded = coder.decode(encoded);
+    cout << "Decoded text: " << decoded << endl;
+
+    return 0;
+}
